@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "LeetCode Daily Reminder",
+    "version": "1.0",
+    "description": "Sets a daily reminder to practice on LeetCode",
+    "permissions": ["storage", "alarms", "notifications"],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "background": {
+      "service_worker": "background.js"
+    }
+  }

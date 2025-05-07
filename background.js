@@ -65,21 +65,66 @@ function scheduleAlarm(timeStr) {
     console.log(`Alarm scheduled for ${timeStr}, in ${Math.round(delayInMinutes)} minutes`);
   });
 }
-
 // Handle alarm trigger
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === "leetcodeAlarm") {
     // Open LeetCode
     chrome.tabs.create({ url: "https://leetcode.com" });
-    
+    chrome.tabs.create({ url: "https://neetcode.io/practice" });
     // Show notification if enabled
     if (showNotification) {
       chrome.notifications.create({
         type: "basic",
-        iconUrl: "icons/icon.png",
+        iconUrl: "icons/icon.jpg",
         title: "LeetCode Reminder",
         message: "Time to practice your coding skills!"
             });
     }
   }
 });
+// Schedule the alarm for every Saturday at 7:50 AM
+function scheduleContestAlarm() {
+  const now = new Date();
+  const alarmTime = new Date();
+  
+  alarmTime.setHours(7);
+  alarmTime.setMinutes(50);
+  alarmTime.setSeconds(0);
+
+  // Find the next Saturday
+  const dayOfWeek = now.getDay(); // Sunday = 0, Saturday = 6
+  const daysUntilSaturday = (6 - dayOfWeek + 7) % 7 || 7; // Ensure it sets for next Saturday
+  alarmTime.setDate(now.getDate() + daysUntilSaturday);
+
+  const delayInMinutes = (alarmTime - now) / 60000;
+
+  chrome.alarms.clear("leetcodeContestAlarm", () => {
+      chrome.alarms.create("leetcodeContestAlarm", {
+          delayInMinutes,
+          periodInMinutes: 10080 // Repeat every 7 days (weekly alarm)
+      });
+
+      console.log(`LeetCode contest alarm scheduled for next Saturday at 7:50 AM`);
+  });
+}
+
+// Handle alarm trigger
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === "leetcodeContestAlarm") {
+      // Open LeetCode contest page
+      chrome.tabs.create({ url: "https://leetcode.com/contest" });
+
+      // Show notification if enabled
+      if (showNotification) {
+          chrome.notifications.create({
+              type: "basic",
+              iconUrl: "icons/icon.jpg",
+              title: "LeetCode Contest Reminder",
+              message: "Contest starts soon! Get ready to participate."
+          });
+      }
+  }
+});
+
+// Initialize the weekly alarm
+scheduleContestAlarm();

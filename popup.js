@@ -83,10 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.sync.set({ loginCount: count });
 
     // 🌱 Show plant stage
-    if (count <0) {
+    if (count <5 ) {
       buddyStage.textContent = "🌱";
       buddyMessage.textContent = "Keep showing up to grow your buddy!";
-    } else if (count < 5) {
+    } else if (count < 10) {
       buddyStage.textContent = "🌿";
       buddyMessage.textContent = "A sprout appears!";
     } else if (count < 20) {
